@@ -42,7 +42,8 @@ export default async function handler(req, res) {
     }
 
     const messages = await openai.beta.threads.messages.list(threadId);
-    const reply = messages.data[0].content[0].text.value;
+    const lastMessage = messages.data.find(msg => msg.role === "assistant");
+const reply = lastMessage?.content?.[0]?.text?.value || "Sorry, I could not understand that.";
 
     res.status(200).json({ reply });
   } catch (err) {
